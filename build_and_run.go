@@ -68,7 +68,8 @@ func gopath() (string, error) {
 	}
 
 	if strings.Contains(goPath, ":") {
-		return "", fmt.Errorf("$GOPATH=%s contains separator :", goPath)
+		segs := strings.Split(goPath, ":")
+		goPath = segs[0]
 	}
 
 	return goPath, nil
