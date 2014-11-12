@@ -68,8 +68,7 @@ func gopath() (string, error) {
 	}
 
 	if strings.Contains(goPath, ":") {
-		segs := strings.Split(goPath, ":")
-		goPath = segs[0]
+		goPath = strings.Split(goPath, ":")[0]
 	}
 
 	return goPath, nil
