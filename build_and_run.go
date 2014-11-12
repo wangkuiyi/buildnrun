@@ -24,12 +24,7 @@ func build(pkg string) error {
 }
 
 func run(pkg string, args ...string) (string, string, error) {
-	goPath, e := gopath()
-	if e != nil {
-		return "", "", e
-	}
-
-	c := exec.Command(path.Join(goPath, "bin", path.Base(pkg)), args...)
+	c := exec.Command(path.Join(gopath(), "bin", path.Base(pkg)), args...)
 	var out, err bytes.Buffer
 	op, _ := c.StdoutPipe()
 	ep, _ := c.StderrPipe()
@@ -39,7 +34,7 @@ func run(pkg string, args ...string) (string, string, error) {
 		return "", "", fmt.Errorf("%s failed: %v", path.Base(pkg), e)
 	}
 
-	return out.String(), err.String(), e
+	return out.String(), err.String(), nil
 }
 
 func Run(pkg string, args ...string) (string, string, error) {
@@ -53,23 +48,9 @@ func Run(pkg string, args ...string) (string, string, error) {
 // PkgDir returns the package directory prefixed by $GOPATH.  In case of error,
 // it returns "".
 func PkgDir(pkg string) string {
-	goPath, e := gopath()
-	if e != nil {
-		return ""
-	}
-	return path.Join(goPath, "src", pkg)
+	return path.Join(gopath(), "src", pkg)
 }
 
-func gopath() (string, error) {
-	goPath := os.Getenv("GOPATH")
-
-	if len(goPath) <= 0 {
-		return "", fmt.Errorf("GOPATH not set")
-	}
-
-	if strings.Contains(goPath, ":") {
-		goPath = strings.Split(goPath, ":")[0]
-	}
-
-	return goPath, nil
+func gopath() string {
+	return strings.Split(os.Getenv("GOPATH"), ":")[0]
 }
