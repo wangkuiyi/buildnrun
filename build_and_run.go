@@ -47,7 +47,7 @@ func Run(pkg string, args ...string) (string, string, error) {
 
 // PkgDir returns the package directory prefixed by $GOPATH.  In case of error,
 // it returns "".
-func PkgDir(pkg string) string {
+func Pkg(pkg string) string {
 	return path.Join(gopath(), "src", pkg)
 }
 
